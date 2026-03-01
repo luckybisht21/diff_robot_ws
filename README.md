@@ -80,8 +80,7 @@ mkdir -p ~/diff_robot_ws/src
 cd ~/diff_robot_ws/src
 
 # Clone repo
-git clone https://github.com/YOUR_USERNAME/diff_robot.git
-
+git clone https:https://github.com/luckybisht21/diff_robott_ws.git
 # Install ROS dependencies
 cd ~/diff_robot_ws
 rosdep install --from-paths src --ignore-src -r -y
