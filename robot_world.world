@@ -1,0 +1,128 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <world name="robot_world">
+
+    <!-- Physics -->
+    <physics type="ode">
+      <real_time_update_rate>1000.0</real_time_update_rate>
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+    </physics>
+
+    <!-- Plugins -->
+    <plugin name="gazebo_ros_state" filename="libgazebo_ros_state.so">
+      <ros><namespace>/gazebo</namespace></ros>
+      <update_rate>1.0</update_rate>
+    </plugin>
+
+    <!-- Sun / Lighting -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+    <!-- Ground plane -->
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <!-- === Terrain Hills (using heightmap-style boxes) === -->
+
+    <!-- Ramp 1 -->
+    <model name="ramp1">
+      <static>true</static>
+      <link name="link">
+        <collision name="col">
+          <geometry><box><size>4 2 0.5</size></box></geometry>
+        </collision>
+        <visual name="vis">
+          <geometry><box><size>4 2 0.5</size></box></geometry>
+          <material><ambient>0.3 0.6 0.1 1</ambient><diffuse>0.3 0.6 0.1 1</diffuse></material>
+        </visual>
+      </link>
+      <pose>6 0 0.25 0 0.2 0</pose>
+    </model>
+
+    <!-- Ramp 2 -->
+    <model name="ramp2">
+      <static>true</static>
+      <link name="link">
+        <collision name="col">
+          <geometry><box><size>3 2 0.3</size></box></geometry>
+        </collision>
+        <visual name="vis">
+          <geometry><box><size>3 2 0.3</size></box></geometry>
+          <material><ambient>0.3 0.5 0.1 1</ambient><diffuse>0.3 0.5 0.1 1</diffuse></material>
+        </visual>
+      </link>
+      <pose>-5 3 0.15 0 -0.15 0.3</pose>
+    </model>
+
+    <!-- Wall obstacle 1 -->
+    <model name="wall1">
+      <static>true</static>
+      <link name="link">
+        <collision name="col">
+          <geometry><box><size>0.2 3 1.0</size></box></geometry>
+        </collision>
+        <visual name="vis">
+          <geometry><box><size>0.2 3 1.0</size></box></geometry>
+          <material><ambient>0.6 0.4 0.2 1</ambient><diffuse>0.6 0.4 0.2 1</diffuse></material>
+        </visual>
+      </link>
+      <pose>3 2 0.5 0 0 0</pose>
+    </model>
+
+    <!-- Wall obstacle 2 -->
+    <model name="wall2">
+      <static>true</static>
+      <link name="link">
+        <collision name="col">
+          <geometry><box><size>3 0.2 1.0</size></box></geometry>
+        </collision>
+        <visual name="vis">
+          <geometry><box><size>3 0.2 1.0</size></box></geometry>
+          <material><ambient>0.6 0.4 0.2 1</ambient><diffuse>0.6 0.4 0.2 1</diffuse></material>
+        </visual>
+      </link>
+      <pose>-3 -3 0.5 0 0 0</pose>
+    </model>
+
+    <!-- Cones / markers -->
+    <model name="cone1">
+      <static>true</static>
+      <link name="link">
+        <collision name="col">
+          <geometry><cylinder><radius>0.1</radius><length>0.5</length></cylinder></geometry>
+        </collision>
+        <visual name="vis">
+          <geometry><cylinder><radius>0.1</radius><length>0.5</length></cylinder></geometry>
+          <material><ambient>1 0.4 0 1</ambient><diffuse>1 0.4 0 1</diffuse></material>
+        </visual>
+      </link>
+      <pose>2 -2 0.25 0 0 0</pose>
+    </model>
+
+    <model name="cone2">
+      <static>true</static>
+      <link name="link">
+        <collision name="col">
+          <geometry><cylinder><radius>0.1</radius><length>0.5</length></cylinder></geometry>
+        </collision>
+        <visual name="vis">
+          <geometry><cylinder><radius>0.1</radius><length>0.5</length></cylinder></geometry>
+          <material><ambient>1 0.4 0 1</ambient><diffuse>1 0.4 0 1</diffuse></material>
+        </visual>
+      </link>
+      <pose>-2 4 0.25 0 0 0</pose>
+    </model>
+
+    <!-- GUI camera view -->
+    <gui fullscreen="0">
+      <camera name="user_camera">
+        <pose>-8 -8 6 0 0.5 0.8</pose>
+        <view_controller>orbit</view_controller>
+      </camera>
+    </gui>
+
+  </world>
+</sdf>

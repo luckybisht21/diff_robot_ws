@@ -1,0 +1,189 @@
+<?xml version="1.0"?>
+<robot name="diff_robot" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <!-- BASE LINK -->
+  <link name="base_link">
+    <visual>
+      <geometry><box size="0.4 0.3 0.1"/></geometry>
+      <material name="blue"><color rgba="0.2 0.2 0.8 1"/></material>
+    </visual>
+    <collision><geometry><box size="0.4 0.3 0.1"/></geometry></collision>
+    <inertial>
+      <mass value="2.0"/>
+      <inertia ixx="0.01" iyy="0.01" izz="0.01"
+               ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+
+  <!-- ══════════ REAR LEFT WHEEL (differential driven) ══════════ -->
+  <link name="rear_left_wheel">
+    <visual>
+      <geometry><cylinder radius="0.06" length="0.04"/></geometry>
+      <material name="black"><color rgba="0 0 0 1"/></material>
+    </visual>
+    <collision><geometry><cylinder radius="0.06" length="0.04"/></geometry></collision>
+    <inertial>
+      <mass value="0.3"/>
+      <inertia ixx="0.0003" iyy="0.0003" izz="0.0003"
+               ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+  <joint name="rear_left_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="rear_left_wheel"/>
+    <origin xyz="-0.12 0.17 -0.04" rpy="1.5708 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <!-- ══════════ REAR RIGHT WHEEL (differential driven) ══════════ -->
+  <link name="rear_right_wheel">
+    <visual>
+      <geometry><cylinder radius="0.06" length="0.04"/></geometry>
+      <material name="black"><color rgba="0 0 0 1"/></material>
+    </visual>
+    <collision><geometry><cylinder radius="0.06" length="0.04"/></geometry></collision>
+    <inertial>
+      <mass value="0.3"/>
+      <inertia ixx="0.0003" iyy="0.0003" izz="0.0003"
+               ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+  <joint name="rear_right_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="rear_right_wheel"/>
+    <origin xyz="-0.12 -0.17 -0.04" rpy="1.5708 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <!-- ══════════ FRONT LEFT WHEEL (passive/fixed steering) ══════════ -->
+  <link name="front_left_wheel">
+    <visual>
+      <geometry><cylinder radius="0.06" length="0.04"/></geometry>
+      <material name="grey"><color rgba="0.4 0.4 0.4 1"/></material>
+    </visual>
+    <collision><geometry><cylinder radius="0.06" length="0.04"/></geometry></collision>
+    <inertial>
+      <mass value="0.3"/>
+      <inertia ixx="0.0003" iyy="0.0003" izz="0.0003"
+               ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+  <joint name="front_left_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="front_left_wheel"/>
+    <origin xyz="0.12 0.17 -0.04" rpy="1.5708 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <!-- ══════════ FRONT RIGHT WHEEL (passive/fixed steering) ══════════ -->
+  <link name="front_right_wheel">
+    <visual>
+      <geometry><cylinder radius="0.06" length="0.04"/></geometry>
+      <material name="grey"><color rgba="0.4 0.4 0.4 1"/></material>
+    </visual>
+    <collision><geometry><cylinder radius="0.06" length="0.04"/></geometry></collision>
+    <inertial>
+      <mass value="0.3"/>
+      <inertia ixx="0.0003" iyy="0.0003" izz="0.0003"
+               ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+  <joint name="front_right_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="front_right_wheel"/>
+    <origin xyz="0.12 -0.17 -0.04" rpy="1.5708 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <!-- ══════════ LIDAR ══════════ -->
+  <link name="lidar_link">
+    <visual>
+      <geometry><cylinder radius="0.04" length="0.05"/></geometry>
+      <material name="red"><color rgba="0.8 0 0 1"/></material>
+    </visual>
+    <collision><geometry><cylinder radius="0.04" length="0.05"/></geometry></collision>
+    <inertial>
+      <mass value="0.1"/>
+      <inertia ixx="0.00005" iyy="0.00005" izz="0.00005"
+               ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+  <joint name="lidar_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="lidar_link"/>
+    <origin xyz="0 0 0.1"/>
+  </joint>
+
+  <!-- ══════════ GAZEBO DIFF DRIVE (rear wheels only) ══════════ -->
+  <gazebo>
+    <plugin name="diff_drive" filename="libgazebo_ros_diff_drive.so">
+      <ros><namespace>/</namespace></ros>
+      <update_rate>30</update_rate>
+      <left_joint>rear_left_wheel_joint</left_joint>
+      <right_joint>rear_right_wheel_joint</right_joint>
+      <wheel_separation>0.34</wheel_separation>
+      <wheel_diameter>0.12</wheel_diameter>
+      <max_wheel_torque>20</max_wheel_torque>
+      <max_wheel_acceleration>1.0</max_wheel_acceleration>
+      <command_topic>cmd_vel</command_topic>
+      <publish_odom>true</publish_odom>
+      <publish_odom_tf>true</publish_odom_tf>
+      <publish_wheel_tf>true</publish_wheel_tf>
+      <odometry_frame>odom</odometry_frame>
+      <robot_base_frame>base_link</robot_base_frame>
+    </plugin>
+  </gazebo>
+
+  <!-- ══════════ WHEEL FRICTION (all 4 wheels) ══════════ -->
+  <gazebo reference="rear_left_wheel">
+    <mu1>1.0</mu1><mu2>1.0</mu2>
+    <material>Gazebo/Black</material>
+  </gazebo>
+  <gazebo reference="rear_right_wheel">
+    <mu1>1.0</mu1><mu2>1.0</mu2>
+    <material>Gazebo/Black</material>
+  </gazebo>
+  <gazebo reference="front_left_wheel">
+    <mu1>0.5</mu1><mu2>0.5</mu2>
+    <material>Gazebo/Grey</material>
+  </gazebo>
+  <gazebo reference="front_right_wheel">
+    <mu1>0.5</mu1><mu2>0.5</mu2>
+    <material>Gazebo/Grey</material>
+  </gazebo>
+
+  <!-- ══════════ LIDAR SENSOR ══════════ -->
+  <gazebo reference="lidar_link">
+    <sensor name="lidar" type="ray">
+      <always_on>true</always_on>
+      <visualize>true</visualize>
+      <update_rate>30</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>360</samples>
+            <resolution>1</resolution>
+            <min_angle>-3.14159</min_angle>
+            <max_angle>3.14159</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.15</min>
+          <max>8.0</max>
+          <resolution>0.01</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </ray>
+      <plugin name="lidar_plugin" filename="libgazebo_ros_ray_sensor.so">
+        <ros><remapping>~/out:=scan</remapping></ros>
+        <output_type>sensor_msgs/LaserScan</output_type>
+        <frame_name>lidar_link</frame_name>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+</robot>
